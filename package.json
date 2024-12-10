@@ -1,4 +1,18 @@
 {
+  "name": "node-rate-limiter",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Limiter",
+    "rate"
+  ],
+  "author": "Akinola Makinde",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
     "typescript": "^5.7.2"
   }
