@@ -1,0 +1,17 @@
+{
+  "name": "rate-limiter",
+  "version": "1.0.0",
+  "description": "Rate limiter for javascript backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "limiter"
+  ],
+  "author": "Akinola Makinde",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^5.7.2"
+  }
+}
