@@ -3,10 +3,11 @@ type RequestStore = {
   request: number;
   ttl: number;
   lastCall: number;
+  requestIp: string;
 };
 
 type Requestparams = {
-  callId: string;
+  requestIp: string;
   functionId: string;
   ttl?: number;
   session_no?: number;

@@ -15,20 +15,21 @@ let requestBucket: RequestStoreObject;
  */
 
 const findRequestbyId = (params: {
-  callId: string;
+  requestIp: string;
   functionId: string;
 }): RequestStore | undefined => {
-  const { callId, functionId } = params;
-  if (!callId || !functionId) {
+  const { requestIp, functionId } = params;
+  if (!requestIp || !functionId) {
     throw new Error('INTERVAL_CACHE_ERROR:CallId and functionId is required');
   }
 
   const requestFromBucket =
-    requestBucket !== undefined ? requestBucket[callId] : [];
+    requestBucket !== undefined ? requestBucket[requestIp] : [];
+
   if (Array.isArray(requestFromBucket) && requestFromBucket.length > 0) {
     for (const interval of requestFromBucket) {
       if (new RegExp(interval.callID).test(functionId)) {
-        return interval;
+        return { ...interval, requestIp };
       } else {
         return;
       }
@@ -43,25 +44,25 @@ const findRequestbyId = (params: {
  */
 
 const addRequestToList = (params: {
-  callid: string;
+  requestIp: string;
   requestObject: RequestStore;
 }) => {
-  const { callid, requestObject, ...rest } = params;
+  const { requestIp, requestObject, ...rest } = params;
 
   // Check that the callid exists before performing any mutation
   const callidExists = Object.keys(requestBucket || {}).some(
-    (id) => id === callid,
+    (id) => id === requestIp,
   );
 
   if (!callidExists) {
     requestBucket = {
       ...requestBucket,
       ...rest,
-      [callid]: [requestObject],
+      [requestIp]: [requestObject],
     };
   } else {
     const currentInterval = [
-      ...requestBucket[callid].filter(
+      ...requestBucket[requestIp].filter(
         (a) => a?.callID !== requestObject.callID,
       ),
       requestObject,
@@ -69,7 +70,7 @@ const addRequestToList = (params: {
 
     requestBucket = {
       ...requestBucket,
-      [callid]: currentInterval,
+      [requestIp]: currentInterval,
     };
   }
 
@@ -80,17 +81,22 @@ const addRequestToList = (params: {
  * @param {*} params
  * does the necessary checks and also updates the state of each request
  */
+
 const limitCorefn = (args: Requestparams) => {
   /**
    * Checks to know if fn by callId exists in scope
    * Adds call to the scope if it doesn't exist
    */
 
-  const { callId, functionId, session_no, ttl } = args;
+  const { requestIp, functionId, session_no, ttl } = args;
 
   const interval = ttl ?? Intervals.Query;
   const session = session_no ?? Intervals.request;
-  const callIDexists = findRequestbyId({ callId, functionId });
+  const currentRequestId = `${requestIp}-${functionId}`;
+  const callIDexists = findRequestbyId({
+    requestIp: currentRequestId,
+    functionId,
+  });
   const date = new Date();
 
   let requestBody: any;
@@ -98,9 +104,9 @@ const limitCorefn = (args: Requestparams) => {
   //add fn() to scope if it doesn't exist
   if (!callIDexists || !Object.keys(callIDexists).length) {
     requestBody = {
-      callid: callId,
+      requestIp: currentRequestId,
       requestObject: {
-        callID: callId,
+        callID: functionId,
         request: session,
         ttl: interval,
         lastCall: +date,
@@ -111,7 +117,7 @@ const limitCorefn = (args: Requestparams) => {
     date.getTime() - callIDexists.lastCall > interval
   ) {
     requestBody = {
-      callid: callIDexists.callID,
+      requestIp: callIDexists.requestIp,
       requestObject: {
         callID: callIDexists.callID,
         request: session,
@@ -122,14 +128,14 @@ const limitCorefn = (args: Requestparams) => {
   } else {
     if (!callIDexists.request) {
       throw new Error(
-        `TOO MANY REQUESTS: call ${callId} has too many requests try again in ${Math.floor(
+        `TOO MANY REQUESTS: call ${functionId} has too many requests try again in ${Math.floor(
           callIDexists.ttl / 60000,
         )} minute(s)`,
       );
     } else {
       const newRequestLimit = callIDexists.request - 1;
       requestBody = {
-        callid: callIDexists.callID,
+        requestIp: callIDexists.requestIp,
         requestObject: {
           callID: callIDexists.callID,
           request: newRequestLimit,
