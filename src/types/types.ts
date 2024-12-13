@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 type RequestStore = {
   callID: string;
   request: number;
@@ -7,10 +9,9 @@ type RequestStore = {
 };
 
 type Requestparams = {
-  requestIp: string;
-  functionId: string;
   ttl?: number;
   session_no?: number;
+  request: Request;
 };
 
 type RequestStoreObject = {
