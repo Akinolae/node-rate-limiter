@@ -172,7 +172,7 @@ const limitCorefn = (args: Requestparams) => {
     ) {
       urlFn = request.body[_req[0]]
         .split(' ')[1]
-        .replace(/[{(]/g, ' ')
+        .replace(/[{(]/g, '')
         .split(' ')[0];
     }
   } else {
