@@ -1,0 +1,22 @@
+name: Build to Dist
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '^18'
+      
+      - name: yarn install && build
+        run: |
+          rm -rf node_modules dist
+          yarn install
+          yarn build
