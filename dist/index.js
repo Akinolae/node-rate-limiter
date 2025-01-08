@@ -105,7 +105,7 @@ const limitCorefn = (args) => {
         }
     }
     else {
-        urlFn = request.baseUrl;
+        urlFn = request.url;
     }
     const interval = ttl ?? Intervals.Query;
     const session = session_no ?? Intervals.request;
