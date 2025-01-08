@@ -188,7 +188,7 @@ const limitCorefn = (args: Requestparams) => {
       urlFn = request.body[_req[0]].split(' ')[1].split('(')[0];
     }
   } else {
-    urlFn = request.originalUrl;
+    urlFn = request.url;
   }
 
   const interval = ttl ?? Intervals.Query;
