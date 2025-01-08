@@ -22,7 +22,7 @@ yarn add @akinolae/node-rate-limiter
 
 Documents are **groups of pages** connected through:
 
-## `Usage`
+## `express.js node.js`
 
 Usage with express.js node.js
 
@@ -49,7 +49,7 @@ const makeRequest = async (req: Request, res: Response) => {
 };
 ```
 
-## `Usage`
+## `@nestJS and graphQL`
 
 Usage with @nestJs and graphQL
 
