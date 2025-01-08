@@ -1,6 +1,6 @@
 {
   "name": "@akinolae/node-rate-limiter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
 
@@ -16,6 +16,10 @@
   "author": "Akinola Makinde",
   "license": "ISC",
   "description": "Rate limiter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Akinolae/node-rate-limiter.git"
+  },
   "dependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.5",
