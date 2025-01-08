@@ -16,8 +16,6 @@ yarn add @akinolae/node-rate-limiter
 
 ---
 
-## sidebar_position: 2
-
 # Usage
 
 Documents are **groups of pages** connected through:
