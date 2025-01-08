@@ -1,4 +1,4 @@
-import { RequestStore, RequestStoreObject, Requestparams } from './types/types';
+import { Request } from 'express';
 
 enum Intervals {
   // Query every 1 minute
@@ -6,8 +6,23 @@ enum Intervals {
   request = 10,
 }
 
-const regexCheck = (defaultVal: string, val: string) =>
-  new RegExp(defaultVal).test(val);
+type RequestStore = {
+  callID: string;
+  request: number;
+  ttl: number;
+  lastCall: number;
+  requestIp: string;
+};
+
+type Requestparams = {
+  ttl?: number;
+  session_no?: number;
+  request: Request;
+};
+
+type RequestStoreObject = {
+  [key: string]: Array<RequestStore>;
+};
 
 let requestBucket: RequestStoreObject;
 
@@ -16,6 +31,9 @@ let requestBucket: RequestStoreObject;
  * @returns a single call that matches the provided ID
  * checks if the call id exists in the interval-list
  */
+
+const regexCheck = (defaultVal: string, val: string) =>
+  new RegExp(defaultVal).test(val);
 
 const findRequestbyId = (params: {
   requestIp: string;
@@ -125,9 +143,7 @@ const manageRequestFn = (params: {
   } else {
     if (!callIDexists.request) {
       throw new Error(
-        `TOO MANY REQUESTS: call ${urlFn} has too many requests try again in ${Math.floor(
-          callIDexists.ttl / 60000,
-        )} minute(s)`,
+        `TOO MANY REQUESTS: call ${urlFn} has too many requests try again in ${Math.floor(callIDexists.ttl / 60000)} minute(s)`,
       );
     } else {
       const newRequestLimit = callIDexists.request - 1;
@@ -149,7 +165,6 @@ const manageRequestFn = (params: {
  * @param {*} params
  * does the necessary checks and also updates the state of each request
  */
-
 const limitCorefn = (args: Requestparams) => {
   /**
    * Checks to know if fn by callId exists in scope
@@ -170,10 +185,7 @@ const limitCorefn = (args: Requestparams) => {
     if (
       _req.some((val: string) => ['query'].includes(val.toLocaleLowerCase()))
     ) {
-      urlFn = request.body[_req[0]]
-        .split(' ')[1]
-        .replace(/[{(]/g, '')
-        .split(' ')[0];
+      urlFn = request.body[_req[0]].split(' ')[1].split('(')[0];
     }
   } else {
     urlFn = request.baseUrl;

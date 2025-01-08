@@ -6,8 +6,8 @@ var Intervals;
     Intervals[Intervals["Query"] = 60000] = "Query";
     Intervals[Intervals["request"] = 10] = "request";
 })(Intervals || (Intervals = {}));
-const regexCheck = (defaultVal, val) => new RegExp(defaultVal).test(val);
 let requestBucket;
+const regexCheck = (defaultVal, val) => new RegExp(defaultVal).test(val);
 const findRequestbyId = (params) => {
     const { requestIp, functionId } = params;
     if (!requestIp || !functionId) {
@@ -101,10 +101,7 @@ const limitCorefn = (args) => {
     if (reqIsGraphql) {
         const _req = Object.keys(request.body);
         if (_req.some((val) => ['query'].includes(val.toLocaleLowerCase()))) {
-            urlFn = request.body[_req[0]]
-                .split(' ')[1]
-                .replace(/[{(]/g, '')
-                .split(' ')[0];
+            urlFn = request.body[_req[0]].split(' ')[1].split('(')[0];
         }
     }
     else {
