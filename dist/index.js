@@ -62,7 +62,7 @@ const manageRequestFn = (params) => {
             },
         };
     }
-    else if (callIDexists.request === 1 &&
+    else if (callIDexists.request <= 1 &&
         date.getTime() - callIDexists.lastCall > interval) {
         requestBody = {
             requestIp: callIDexists.requestIp,
@@ -70,7 +70,7 @@ const manageRequestFn = (params) => {
                 callID: callIDexists.callID,
                 request: session,
                 ttl: callIDexists.ttl,
-                lastCall: callIDexists.lastCall,
+                lastCall: +date,
             },
         };
     }
@@ -86,7 +86,7 @@ const manageRequestFn = (params) => {
                     callID: callIDexists.callID,
                     request: newRequestLimit,
                     ttl: callIDexists.ttl,
-                    lastCall: +date,
+                    lastCall: callIDexists.lastCall,
                 },
             };
         }
