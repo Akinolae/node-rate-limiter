@@ -63,7 +63,7 @@ const makeRequest = async (context: ExecutionContext) => {
      */
 
     requestLimitCore({
-      request: req,
+      request: context.getArgByIndex(2).req,
       session_no: 6,
       ttl:  6 * 60 * 1000,
     });
