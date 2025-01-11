@@ -65,7 +65,7 @@ const makeRequest = async (context: ExecutionContext) => {
     requestLimitCore({
       request: context.getArgByIndex(2).req,
       session_no: 6,
-      ttl:  6 * 60 * 1000,
+      ttl: 6 * 60 * 1000,
     });
 
     // auth calls go here
@@ -74,3 +74,11 @@ const makeRequest = async (context: ExecutionContext) => {
   }
 };
 ```
+
+### Configuration
+
+| Option     | Type     | Description                                                                    |
+| ---------- | -------- | ------------------------------------------------------------------------------ |
+| ttl        | `number` | time to live `optional`                                                        |
+| session_no | `number` | The number of times a request can be called `optional`                         |
+| request    | `object` | The request object that carries the metadata of an incoming request `required` |
