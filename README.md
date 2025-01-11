@@ -63,9 +63,9 @@ const makeRequest = async (context: ExecutionContext) => {
      */
 
     requestLimitCore({
-      request: req,
+      request: context.getArgByIndex(2).req,
       session_no: 6,
-      ttl: context.getArgByIndex(2).req,
+      ttl:  6 * 60 * 1000,
     });
 
     // auth calls go here
