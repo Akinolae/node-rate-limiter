@@ -143,7 +143,9 @@ const manageRequestFn = (params: {
   } else {
     if (!callIDexists.request) {
       throw new Error(
-        `TOO MANY REQUESTS: call ${urlFn} has too many requests try again in ${Math.floor(callIDexists.ttl / 60000)} minute(s)`,
+        `TOO MANY REQUESTS: call ${urlFn} has too many requests try again in ${Math.floor(
+          callIDexists.ttl / 60000,
+        )} minute(s)`,
       );
     } else {
       const newRequestLimit = callIDexists.request - 1;
@@ -185,7 +187,7 @@ const limitCorefn = (args: Requestparams) => {
     if (
       _req.some((val: string) => ['query'].includes(val.toLocaleLowerCase()))
     ) {
-      urlFn = request.body[_req[0]].split(' ')[1].split('(')[0];
+      urlFn = request.body[_req[0]].trimStart().split(' ')[1].split('(')[0];
     }
   } else {
     urlFn = request.url;
