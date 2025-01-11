@@ -128,7 +128,7 @@ const manageRequestFn = (params: {
       },
     };
   } else if (
-    callIDexists.request === 1 &&
+    callIDexists.request <= 1 &&
     date.getTime() - callIDexists.lastCall > interval
   ) {
     requestBody = {
@@ -137,7 +137,7 @@ const manageRequestFn = (params: {
         callID: callIDexists.callID,
         request: session,
         ttl: callIDexists.ttl,
-        lastCall: callIDexists.lastCall,
+        lastCall: +date,
       },
     };
   } else {
@@ -155,7 +155,7 @@ const manageRequestFn = (params: {
           callID: callIDexists.callID,
           request: newRequestLimit,
           ttl: callIDexists.ttl,
-          lastCall: +date,
+          lastCall: callIDexists.lastCall,
         },
       };
     }
