@@ -101,7 +101,7 @@ const limitCorefn = (args) => {
     if (reqIsGraphql) {
         const _req = Object.keys(request.body);
         if (_req.some((val) => ['query'].includes(val.toLocaleLowerCase()))) {
-            urlFn = request.body[_req[0]].split(' ')[1].split('(')[0];
+            urlFn = request.body[_req[0]].trimStart().split(' ')[1].split('(')[0];
         }
     }
     else {
